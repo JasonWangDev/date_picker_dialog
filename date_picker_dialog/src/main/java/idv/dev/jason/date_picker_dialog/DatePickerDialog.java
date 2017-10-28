@@ -39,12 +39,14 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
     private static final String KEY_CALENDAR = "KEY_CALENDAR";
 
+    private OnDatePickerListener listener;
+
+    private Calendar calendar;
+
     private DatePicker datePicker;
 
     private Button btnSubmit;
     private Button btnCancel;
-
-    private OnDatePickerListener listener;
 
 
     //*************************************** 建構子宣告 *****************************************//
@@ -60,7 +62,14 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     }
 
 
-    //************************************** 生命週期宣告 ****************************************//
+    //************************************** 生命週期實作 ****************************************//
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        initParams();
+    }
 
     @Nullable
     @Override
@@ -74,6 +83,8 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
         btnSubmit = parent.findViewById(R.id.btn_submit);
         btnCancel = parent.findViewById(R.id.btn_cancel);
 
+        datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
         btnSubmit.setText("確認");
         btnCancel.setText("取消");
 
@@ -85,18 +96,18 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
 
         registerListener();
-        updateUi();
     }
 
     @Override
     public void onDestroy() {
         unregisterListener();
+        releaseParams();
 
         super.onDestroy();
     }
 
 
-    //******************************** OnClickListener 介面宣告 **********************************//
+    //******************************** OnClickListener 介面實作 **********************************//
 
     @Override
     public void onClick(View view) {
@@ -111,29 +122,6 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     }
 
 
-    //*************************************** 私用類宣告 *****************************************//
-
-    private class UpdateUiTask implements Runnable {
-        private Calendar calendar;
-
-
-        public UpdateUiTask(Calendar calendar) {
-            this.calendar = calendar;
-        }
-
-
-        @Override
-        public void run() {
-            if (null == calendar || null == datePicker)
-                return;
-
-            datePicker.updateDate(calendar.get(Calendar.YEAR),
-                                  calendar.get(Calendar.MONTH),
-                                  calendar.get(Calendar.DAY_OF_MONTH));
-        }
-    }
-
-
     //************************************** 公用方法宣告 ****************************************//
 
     public void setOnDatePickerListener(OnDatePickerListener listener) {
@@ -142,6 +130,14 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
 
 
     //************************************** 私用方法宣告 ****************************************//
+
+    private void initParams() {
+        Bundle bundle = getArguments();
+        calendar = (Calendar) bundle.getSerializable(KEY_CALENDAR);
+    }
+
+    private void releaseParams() { }
+
 
     private void registerListener() {
         btnSubmit.setOnClickListener(this);
@@ -157,13 +153,6 @@ public class DatePickerDialog extends DialogFragment implements View.OnClickList
     private void initDialog() {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(false);
-    }
-
-    private void updateUi() {
-        Bundle bundle = getArguments();
-        Calendar calendar = (Calendar) bundle.getSerializable(KEY_CALENDAR);
-        Runnable updateUiTask = new UpdateUiTask(calendar);
-        getDialog().getWindow().getDecorView().post(updateUiTask);
     }
 
 

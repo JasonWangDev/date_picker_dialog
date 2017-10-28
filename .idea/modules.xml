@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/date_picker_dialog/date_picker_dialog.iml" filepath="$PROJECT_DIR$/date_picker_dialog/date_picker_dialog.iml" />
-      <module fileurl="file://$PROJECT_DIR$/seges.iml" filepath="$PROJECT_DIR$/seges.iml" />
+      <module fileurl="file://$PROJECT_DIR$/date_picker_dialog.iml" filepath="$PROJECT_DIR$/date_picker_dialog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/date_picker_dialog/date_picker_dialog-date_picker_dialog.iml" filepath="$PROJECT_DIR$/date_picker_dialog/date_picker_dialog-date_picker_dialog.iml" />
     </modules>
   </component>
 </project>
